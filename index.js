@@ -23,6 +23,7 @@ app.use(express.json({ limit: '10mb' })); // Habilita o Express a parsear corpos
 
 // Serve arquivos estáticos da pasta 'public'
 // Isso fará com que o Render sirva seu index.html e outros arquivos do frontend
+// Mantenha esta linha para servir outros assets (CSS, JS, imagens) que possam estar na pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuração da API do Gemini
@@ -164,8 +165,9 @@ async function boasVindas() {
 // =========================
 
 // Rota para servir o arquivo HTML principal na raiz do domínio
+// Esta rota é agora mais explícita para garantir que o index.html seja servido
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 app.post('/botao', async (req, res) => {
