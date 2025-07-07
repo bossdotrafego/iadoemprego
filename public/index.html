@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA do Emprego - Seu Assistente de Carreira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .chat-bubble {
+            border-radius: 1.5rem;
+            max-width: 85%;
+        }
+        @media (min-width: 768px) {
+            .chat-bubble {
+                max-width: 65%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 py-4 px-6 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex items-center space-x-3">
+            <div class="bg-yellow-500 w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-briefcase text-gray-900 text-xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+                IA do Emprego
+            </h1>
+        </div>
+        <button class="bg-yellow-600 hover:bg-yellow-700 text-gray-900 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200 transform hover:scale-105">
+            VER PLANOS
+        </button>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="hidden md:flex flex-col w-20 lg:w-64 bg-gray-800 border-r border-gray-700 overflow-y-auto scrollbar-hide">
+            <nav class="flex-1 py-4 px-2 lg:px-4 space-y-2">
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200 text-yellow-400" data-prompt="criar-curriculo">
+                    <i class="fas fa-file-alt text-2xl lg:text-xl lg:mr-3"></i>
+                    <span class="text-xs lg:text-sm mt-1 lg:mt-0 text-center lg:text-left">Criar Currículo</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="vagas-disponiveis">
+                    <i class="fas fa-search text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Vagas Disponíveis</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="simular-entrevista">
+                    <i class="fas fa-comments text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Simular Entrevista</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="avaliar-curriculo">
+                    <i class="fas fa-star text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Avaliar Currículo</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="profissao-ideal">
+                    <i class="fas fa-lightbulb text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Profissão Ideal</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="cursos-gratuitos">
+                    <i class="fas fa-graduation-cap text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Cursos Gratuitos</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="salario-justo">
+                    <i class="fas fa-money-bill-wave text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Salário Justo</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="primeiro-emprego">
+                    <i class="fas fa-user-graduate text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>1º Emprego</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="jovem-aprendiz">
+                    <i class="fas fa-hands-helping text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Jovem Aprendiz</span>
+                </button>
+                <button onclick="setActiveButton(this)" class="feature-btn w-full flex flex-col lg:flex-row items-center justify-center lg:justify-start p-3 rounded-xl hover:bg-gray-700 transition-all duration-200" data-prompt="banco-talentos">
+                    <i class="fas fa-users text-2xl lg:text-xl lg:mr-3"></i>
+                    <span>Banco de Talentos</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Mobile Bottom Navigation -->
+        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 flex justify-around py-2 z-10">
+            <button onclick="setActiveButton(this)" class="feature-btn flex flex-col items-center p-2 text-xs" data-prompt="criar-curriculo">
+                <i class="fas fa-file-alt text-lg mb-1"></i>
+                <span>Currículo</span>
+            </button>
+            <button onclick="setActiveButton(this)" class="feature-btn flex flex-col items-center p-2 text-xs" data-prompt="vagas-disponiveis">
+                <i class="fas fa-search text-lg mb-1"></i>
+                <span>Vagas</span>
+            </button>
+            <button onclick="setActiveButton(this)" class="feature-btn flex flex-col items-center p-2 text-xs" data-prompt="simular-entrevista">
+                <i class="fas fa-comments text-lg mb-1"></i>
+                <span>Entrevista</span>
+            </button>
+            <button onclick="showMoreFeatures()" class="flex flex-col items-center p-2 text-xs">
+                <i class="fas fa-ellipsis-h text-lg mb-1"></i>
+                <span>Mais</span>
+            </button>
+        </div>
+
+        <!-- Mobile Features Modal -->
+        <div id="mobileFeaturesModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 z-20 hidden flex-col items-center justify-center p-4">
+            <div class="bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] overflow-y-auto p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-yellow-400">Todos os Recursos</h2>
+                    <button onclick="hideMoreFeatures()" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="avaliar-curriculo">
+                        <i class="fas fa-star text-xl mb-2"></i>
+                        <span>Avaliar Currículo</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="profissao-ideal">
+                        <i class="fas fa-lightbulb text-xl mb-2"></i>
+                        <span>Profissão Ideal</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="cursos-gratuitos">
+                        <i class="fas fa-graduation-cap text-xl mb-2"></i>
+                        <span>Cursos Gratuitos</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="salario-justo">
+                        <i class="fas fa-money-bill-wave text-xl mb-2"></i>
+                        <span>Salário Justo</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="primeiro-emprego">
+                        <i class="fas fa-user-graduate text-xl mb-2"></i>
+                        <span>1º Emprego</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="jovem-aprendiz">
+                        <i class="fas fa-hands-helping text-xl mb-2"></i>
+                        <span>Jovem Aprendiz</span>
+                    </button>
+                    <button onclick="setActiveButton(this); hideMoreFeatures();" class="feature-btn bg-gray-700 hover:bg-gray-600 p-3 rounded-lg flex flex-col items-center" data-prompt="banco-talentos">
+                        <i class="fas fa-users text-xl mb-2"></i>
+                        <span>Banco de Talentos</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Chat Messages Container -->
+            <div id="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-4 pb-20 md:pb-4">
+                <!-- Welcome Message (será adicionada via JS agora) -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="bg-gray-800 border-t border-gray-700 p-3">
+                <div class="flex items-center space-x-2">
+                    <input id="userInput" type="text" placeholder="Digite sua mensagem..." class="flex-1 bg-gray-700 border border-gray-600 rounded-full px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    <button onclick="sendMessage()" class="bg-yellow-600 hover:bg-yellow-700 text-gray-900 font-semibold w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-105">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 text-center">Atendimento 100% gratuito - versão beta</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Variável para armazenar o histórico de chat para interações contínuas (especialmente para entrevista)
+        let chatHistory = [];
+        // Variável para controlar a ação atual baseada no botão clicado
+        let currentAction = 'boas-vindas';
+
+        // URL do seu backend Node.js
+        const BACKEND_URL = 'https://iadoemprego.onrender.com/botao'; // <--- ATUALIZADO PARA A URL DO RENDER!
+
+        // Função para adicionar uma mensagem do bot ao chat
+        function addBotMessage(text, isLoading = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fade-in flex justify-start';
+            messageDiv.innerHTML = `
+                <div class="chat-bubble bg-gray-700 p-4">
+                    <div class="flex items-start space-x-2">
+                        <div class="bg-yellow-500 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-briefcase text-gray-900 text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-yellow-400">IA do Emprego</h3>
+                            <p class="text-gray-100 mt-1">${text}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (isLoading) {
+                // Retorna o elemento para que possa ser removido depois
+                return messageDiv;
+            }
+            return null;
+        }
+
+        // Função para adicionar uma mensagem do usuário ao chat
+        function addUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fade-in flex justify-end';
+            messageDiv.innerHTML = `
+                <div class="chat-bubble bg-gray-600 p-4">
+                    <p class="text-gray-100">${text}</p>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Função principal para enviar mensagens e interagir com o backend
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+
+                // Adiciona a mensagem do usuário ao histórico ANTES de enviar ao backend
+                chatHistory.push({ role: "user", parts: [{ text: message }] });
+
+                // Adiciona um indicador de carregamento
+                const loadingMessageDiv = addBotMessage('Digitando...', true);
+
+                try {
+                    // Prepara os dados a serem enviados para o backend
+                    let requestBody = {
+                        acao: currentAction, // Usa a ação definida pelo botão clicado
+                        dados: {}, // Objeto para dados específicos da ação
+                        chatHistory: chatHistory // Envia o histórico completo para o Gemini
+                    };
+
+                    // Lógica para popular 'dados' com base na 'currentAction' e na 'message' do usuário
+                    // Isso é um exemplo, você pode precisar de mais lógica para extrair informações da mensagem
+                    switch (currentAction) {
+                        case 'criar-curriculo':
+                            // Aqui você precisaria de um formulário ou de mais interações para coletar os dados do currículo
+                            // Por agora, vamos apenas passar a mensagem como um dado genérico para a IA interpretar
+                            requestBody.dados.mensagem = message;
+                            break;
+                        case 'vagas-disponiveis':
+                            requestBody.dados.cidade = message; // Assume que a mensagem é a cidade
+                            break;
+                        case 'avaliar-curriculo':
+                            requestBody.dados.texto = message; // Assume que a mensagem é o texto do currículo
+                            break;
+                        case 'profissao-ideal':
+                            requestBody.dados.gostos = message; // Assume que a mensagem são os gostos
+                            break;
+                        case 'salario-justo':
+                            // Aqui a mensagem pode conter cargo e cidade, precisaria de parsing
+                            requestBody.dados.cargo = message.split(' em ')[0]; // Exemplo simples
+                            requestBody.dados.cidade = message.split(' em ')[1] || '';
+                            break;
+                        case 'jovem-aprendiz':
+                            requestBody.dados.idade = parseInt(message); // Assume que a mensagem é a idade
+                            break;
+                        case 'simular-entrevista':
+                            // O chatHistory já está sendo enviado, o Gemini continuará a conversa
+                            break;
+                        // Para outras ações, a IA pode interpretar a mensagem diretamente
+                        default:
+                            requestBody.dados.mensagem = message; // Para chat livre
+                            break;
+                    }
+
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    const data = await response.json();
+
+                    // Remove o indicador de carregamento
+                    if (loadingMessageDiv) {
+                        loadingMessageDiv.remove();
+                    }
+
+                    if (data.resposta) {
+                        addBotMessage(data.resposta);
+                        // Adiciona a resposta do bot ao histórico
+                        chatHistory.push({ role: "model", parts: [{ text: data.resposta }] });
+                    } else if (data.erro) {
+                        addBotMessage(`Erro da IA: ${data.erro}`);
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao comunicar com o backend:', error);
+                    if (loadingMessageDiv) {
+                        loadingMessageDiv.remove();
+                    }
+                    addBotMessage('Desculpe, não foi possível conectar com a IA. Por favor, tente novamente mais tarde.');
+                }
+            }
+        }
+
+        // Define o estilo do botão ativo e envia o prompt inicial para o backend
+        async function setActiveButton(button) {
+            document.querySelectorAll('.feature-btn').forEach(btn => {
+                btn.classList.remove('text-yellow-400', 'bg-gray-700');
+                btn.classList.add('text-gray-300');
+            });
+            
+            button.classList.add('text-yellow-400', 'bg-gray-700');
+            button.classList.remove('text-gray-300');
+            
+            currentAction = button.getAttribute('data-prompt'); // Atualiza a ação atual
+            chatHistory = []; // Reinicia o histórico de chat para uma nova funcionalidade
+
+            // Adiciona um indicador de carregamento
+            const loadingMessageDiv = addBotMessage('Aguarde, a IA está pensando...', true);
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: currentAction, dados: {}, chatHistory: [] }) // Envia a ação inicial
+                });
+                const data = await response.json();
+
+                if (loadingMessageDiv) {
+                    loadingMessageDiv.remove();
+                }
+
+                if (data.resposta) {
+                    addBotMessage(data.resposta);
+                    chatHistory.push({ role: "model", parts: [{ text: data.resposta }] });
+                } else if (data.erro) {
+                    addBotMessage(`Erro da IA: ${data.erro}`);
+                }
+            } catch (error) {
+                console.error('Erro ao chamar o backend para o botão:', error);
+                if (loadingMessageDiv) {
+                    loadingMessageDiv.remove();
+                }
+                addBotMessage('Desculpe, não foi possível carregar a funcionalidade. Tente novamente.');
+            }
+        }
+        
+        // Quick prompt buttons (mantido para compatibilidade, mas agora chama sendMessage)
+        function quickPrompt(prompt) {
+            document.getElementById('userInput').value = prompt;
+            sendMessage();
+        }
+        
+        // Handle Enter key press
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Mobile features modal
+        function showMoreFeatures() {
+            document.getElementById('mobileFeaturesModal').classList.remove('hidden');
+            document.getElementById('mobileFeaturesModal').classList.add('flex');
+        }
+        
+        function hideMoreFeatures() {
+            document.getElementById('mobileFeaturesModal').classList.add('hidden');
+            document.getElementById('mobileFeaturesModal').classList.remove('flex');
+        }
+
+        // Lógica para adicionar a mensagem de boas-vindas da IA ao carregar a página
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loadingMessageDiv = addBotMessage('Carregando IA do Emprego...', true);
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'boas-vindas', dados: {}, chatHistory: [] })
+                });
+                const data = await response.json();
+
+                if (loadingMessageDiv) {
+                    loadingMessageDiv.remove();
+                }
+
+                if (data.resposta) {
+                    addBotMessage(data.resposta);
+                    chatHistory.push({ role: "model", parts: [{ text: data.resposta }] });
+                } else if (data.erro) {
+                    addBotMessage(`Erro ao carregar boas-vindas: ${data.erro}`);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar mensagem de boas-vindas:', error);
+                if (loadingMessageDiv) {
+                    loadingMessageDiv.remove();
+                }
+                addBotMessage('Desculpe, não foi possível carregar a mensagem de boas-vindas.');
+            }
+        });
+    </script>
+</body>
+</html>
