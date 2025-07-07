@@ -13,6 +13,11 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url); // Obtém o caminho do arquivo atual
 const __dirname = path.dirname(__filename); // Obtém o diretório do arquivo atual
 
+// Adiciona um log para verificar o __dirname no Render
+console.log(`Caminho atual do diretório (__dirname): ${__dirname}`);
+console.log(`Caminho para a pasta public: ${path.join(__dirname, 'public')}`);
+
+
 app.use(cors()); // Permite requisições de diferentes origens (importante para o frontend)
 app.use(express.json({ limit: '10mb' })); // Habilita o Express a parsear corpos de requisição JSON, com limite maior para futuras funcionalidades (ex: upload de imagens)
 
