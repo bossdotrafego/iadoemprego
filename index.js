@@ -2,14 +2,23 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import fetch from 'node-fetch'; // <-- Adicione esta linha para importar o node-fetch
+import fetch from 'node-fetch';
+import path from 'path'; // Importa o módulo path para lidar com caminhos de arquivos
+import { fileURLToPath } from 'url'; // Importa fileURLToPath para obter o caminho do arquivo atual
 
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url); // Obtém o caminho do arquivo atual
+const __dirname = path.dirname(__filename); // Obtém o diretório do arquivo atual
+
 app.use(cors()); // Permite requisições de diferentes origens (importante para o frontend)
-app.use(express.json()); // Habilita o Express a parsear corpos de requisição JSON
+app.use(express.json({ limit: '10mb' })); // Habilita o Express a parsear corpos de requisição JSON, com limite maior para futuras funcionalidades (ex: upload de imagens)
+
+// Serve arquivos estáticos da pasta 'public'
+// Isso fará com que o Render sirva seu index.html e outros arquivos do frontend
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuração da API do Gemini
 // Se você estiver no ambiente Canvas, a chave será injetada automaticamente se for uma string vazia.
@@ -148,6 +157,11 @@ async function boasVindas() {
 // =========================
 // Rotas da API
 // =========================
+
+// Rota para servir o arquivo HTML principal na raiz do domínio
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.post('/botao', async (req, res) => {
     const { acao, dados, chatHistory } = req.body; // Adicionado chatHistory para simulação de entrevista
