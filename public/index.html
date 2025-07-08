@@ -191,8 +191,7 @@
             const chatContainer = document.getElementById('chatContainer');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'fade-in flex justify-start';
-            messageDiv.innerHTML = `
-                <div class="chat-bubble bg-gray-700 p-4">
+            messageDiv.innerHTML = `<div class="chat-bubble bg-gray-700 p-4">
                     <div class="flex items-start space-x-2">
                         <div class="bg-yellow-500 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-briefcase text-gray-900 text-sm"></i>
@@ -202,8 +201,7 @@
                             <p class="text-gray-100 mt-1">${text}</p>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
             if (isLoading) {
@@ -218,11 +216,9 @@
             const chatContainer = document.getElementById('chatContainer');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'fade-in flex justify-end';
-            messageDiv.innerHTML = `
-                <div class="chat-bubble bg-gray-600 p-4">
+            messageDiv.innerHTML = `<div class="chat-bubble bg-gray-600 p-4">
                     <p class="text-gray-100">${text}</p>
-                </div>
-            `;
+                </div>`;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }

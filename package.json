@@ -5,11 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": ["ia", "emprego", "carreira", "assistente"],
-  "author": "Seu Nome",
+  "author": "Seu nome",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
